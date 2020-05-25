@@ -7,7 +7,7 @@
     app:startDestination="@id/moviesScreenFragment2">
     <fragment
         android:id="@+id/moviesScreenFragment2"
-        android:name="com.zennymorh.movies.MoviesScreenFragment"
+        android:name="com.zennymorh.movies.movieScreen.MoviesScreenFragment"
         android:label="fragment_movies_screen"
         tools:layout="@layout/fragment_movies_screen" />
 </navigation>

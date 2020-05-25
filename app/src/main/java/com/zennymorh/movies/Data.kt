@@ -4,16 +4,6 @@ import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
 
-@Parcelize
-data class Movie(
-    val id: Int,
-    @SerializedName("poster_path")
-    val posterPath: String,
-    val adult: Boolean,
-    val overview: String,
-    val releaseDate: String,
-    val title: String
-): Parcelable
 
 @Parcelize
 data class MovieResult(
@@ -32,6 +22,28 @@ data class TrailerResult(
 ): Parcelable
 
 @Parcelize
+data class ReviewResult(
+    val id: Int,
+    val page: Int,
+    val results: ArrayList<Review>,
+    @SerializedName("total_pages")
+    val totalPages: Int,
+    @SerializedName("total_results")
+    val totalResults:Int
+): Parcelable
+
+@Parcelize
+data class Movie(
+    val id: Int,
+    @SerializedName("poster_path")
+    val posterPath: String,
+    val adult: Boolean,
+    val overview: String,
+    val releaseDate: String,
+    val title: String
+): Parcelable
+
+@Parcelize
 data class Trailer(
     val id: String,
     val iso_639_1: String,
@@ -41,17 +53,6 @@ data class Trailer(
     val site: String,
     val size: Int,
     val type: String
-): Parcelable
-
-@Parcelize
-data class ReviewResult(
-    val id: Int,
-    val page: Int,
-    val results: ArrayList<Review>,
-    @SerializedName("total_pages")
-    val totalPages: Int,
-    @SerializedName("total_results")
-    val totalResults:Int
 ): Parcelable
 
 @Parcelize
