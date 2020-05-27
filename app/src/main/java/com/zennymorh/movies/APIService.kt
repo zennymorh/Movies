@@ -22,7 +22,7 @@ interface MovieAPIService {
 
     @GET("movie/popular?api_key=$API_KEY")
     suspend fun getPopularMovies():
-            ArrayList<MovieResult>
+            MovieResult
 
     @GET("movie/{id}/videos?api_key=$API_KEY")
     suspend fun getMovieTrailers():

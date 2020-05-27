@@ -24,6 +24,11 @@ class MovieScreenAdapter(private var movieList: ArrayList<Movie>, var listener: 
         holder.bind(movie)
     }
 
+    fun updateList(list: ArrayList<Movie>) {
+        movieList = list
+        notifyDataSetChanged()
+    }
+
     inner class MovieViewHolder(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(inflater.inflate(R.layout.movie_item, parent, false)),
         View.OnClickListener {

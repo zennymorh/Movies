@@ -9,5 +9,14 @@
         android:id="@+id/moviesScreenFragment2"
         android:name="com.zennymorh.movies.movieScreen.MoviesScreenFragment"
         android:label="fragment_movies_screen"
-        tools:layout="@layout/fragment_movies_screen" />
+        tools:layout="@layout/fragment_movies_screen" >
+        <action
+            android:id="@+id/action_moviesScreenFragment2_to_detailScreenFragment"
+            app:destination="@id/detailScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailScreenFragment"
+        android:name="com.zennymorh.movies.detailScreen.DetailScreenFragment"
+        android:label="detail_screen_fragment"
+        tools:layout="@layout/detail_screen_fragment" />
 </navigation>
