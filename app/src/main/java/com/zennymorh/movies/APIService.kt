@@ -1,16 +1,12 @@
 package com.zennymorh.movies
 
-import android.util.JsonReader
-import com.google.gson.JsonObject
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import retrofit2.http.Body
 import retrofit2.http.GET
-import retrofit2.http.POST
 import retrofit2.http.Path
 
-private const val BASE_URL = "http://3.7.243.112:8000/"
+private const val BASE_URL = "https://api.themoviedb.org/3/"
 private const val API_KEY = "d5c2a0fd5dc0cb6f0b41de11ec78d19b"
 
 private val retrofit = Retrofit.Builder()
@@ -35,10 +31,6 @@ interface MovieAPIService {
     @GET("movie/{id}/reviews?api_key=$API_KEY")
     suspend fun getReviews(@Path("id") id: String):
             ArrayList<ReviewResult>
-
-    @POST("create_log")
-    suspend fun postTest(@Body nilesh: Nilesh):
-            JsonObject
 }
 
 object APIService {

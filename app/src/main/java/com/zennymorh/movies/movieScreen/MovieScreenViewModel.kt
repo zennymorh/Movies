@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.zennymorh.movies.APIService
 import com.zennymorh.movies.Movie
-import com.zennymorh.movies.Nilesh
 import kotlinx.coroutines.launch
 
 class MovieScreenViewModel: ViewModel() {
@@ -19,12 +18,11 @@ class MovieScreenViewModel: ViewModel() {
         getMovieList()
     }
 
-    fun getMovieList() {
+    private fun getMovieList() {
         viewModelScope.launch {
             try {
-                val message = APIService.retrofitService.postTest(Nilesh())
-                Log.i("TESTTTT", message.toString())
-//                _movies.value= listMovies.results
+                val listMovies = APIService.retrofitService.getPopularMovies()
+                _movies.value= listMovies.results
             } catch (t: Throwable) {
                 Log.i("MSVModel", t.localizedMessage!!)
             }
