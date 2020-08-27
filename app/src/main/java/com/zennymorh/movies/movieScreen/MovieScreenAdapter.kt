@@ -3,12 +3,16 @@ package com.zennymorh.movies.movieScreen
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.squareup.picasso.Picasso
 import com.zennymorh.movies.Movie
 import com.zennymorh.movies.R
+import kotlinx.android.synthetic.main.movie_item.view.*
 
 typealias ItemClickListener = (Movie) -> Unit
+const val BASE_IMAGE_PATH = "https://image.tmdb.org/t/p/w780"
 
 class MovieScreenAdapter(private var movieList: ArrayList<Movie>, var listener: ItemClickListener):
         RecyclerView.Adapter<MovieScreenAdapter.MovieViewHolder>() {
@@ -38,18 +42,22 @@ class MovieScreenAdapter(private var movieList: ArrayList<Movie>, var listener: 
             listener.invoke(movie)
         }
 
-        private var titleText: TextView? = null
-        private var dateText: TextView? = null
+        var titleText: TextView? = null
+        var dateText: TextView? = null
+        var imageView: ImageView? = null
 
         init {
             titleText = itemView.findViewById(R.id.titleTV)
             dateText = itemView.findViewById(R.id.dateTV)
+            imageView = itemView.findViewById(R.id.posterImgView)
             itemView.setOnClickListener(this)
         }
 
         fun bind(movie: Movie) {
             titleText?.text = movie.title
             dateText?.text = movie.releaseDate
+
+            Picasso.get().load("$BASE_IMAGE_PATH${movie.posterPath}").into(itemView.posterImgView)
         }
     }
 }

@@ -36,9 +36,10 @@ data class ReviewResult(
 data class Movie(
     val id: Int,
     @SerializedName("poster_path")
-    val posterPath: String,
+    val posterPath: String? = null,
     val adult: Boolean,
     val overview: String,
+    @SerializedName("release_date")
     val releaseDate: String,
     val title: String
 ): Parcelable

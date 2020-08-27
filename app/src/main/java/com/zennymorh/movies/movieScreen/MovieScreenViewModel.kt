@@ -14,6 +14,10 @@ class MovieScreenViewModel: ViewModel() {
     val movies: LiveData<ArrayList<Movie>>
         get() = _movies
 
+    private val _status = MutableLiveData<String>()
+    val status: LiveData<String>
+        get() = _status
+
     init {
         getMovieList()
     }
