@@ -18,5 +18,9 @@
         android:id="@+id/detailScreenFragment"
         android:name="com.zennymorh.movies.detailScreen.DetailScreenFragment"
         android:label="detail_screen_fragment"
-        tools:layout="@layout/detail_screen_fragment" />
+        tools:layout="@layout/detail_screen_fragment" >
+        <argument
+            android:name="selectedMovie"
+            app:argType="com.zennymorh.movies.Movie" />
+    </fragment>
 </navigation>

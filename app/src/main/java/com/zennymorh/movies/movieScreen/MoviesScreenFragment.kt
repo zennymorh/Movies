@@ -27,7 +27,8 @@ class MoviesScreenFragment : Fragment() {
     private val onMovieItemSelected by lazy {
         object : ItemClickListener {
             override fun invoke(movie: Movie) {
-                findNavController().navigate(R.id.action_moviesScreenFragment2_to_detailScreenFragment)
+                val action = MoviesScreenFragmentDirections.actionMoviesScreenFragment2ToDetailScreenFragment(movie)
+                findNavController().navigate(action)
             }
         }
     }

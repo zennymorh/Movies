@@ -6,14 +6,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.navArgs
+import com.zennymorh.movies.Movie
 
 import com.zennymorh.movies.R
+import kotlinx.android.synthetic.main.detail_screen_fragment.*
 
 class DetailScreenFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = DetailScreenFragment()
-    }
+    private val args: DetailScreenFragmentArgs by navArgs()
 
     private lateinit var viewModel: DetailScreenViewModel
 
@@ -24,10 +25,14 @@ class DetailScreenFragment : Fragment() {
         return inflater.inflate(R.layout.detail_screen_fragment, container, false)
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         viewModel = ViewModelProviders.of(this).get(DetailScreenViewModel::class.java)
-        // TODO: Use the ViewModel
+
+        val movie = args.selectedMovie
+
+        expand_text_view.text = getString(R.string.overview_text)
+
     }
 
 }
