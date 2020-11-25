@@ -34,7 +34,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <com.google.android.material.textview.MaterialTextView
+            <TextView
                 android:id="@+id/movieTitleTV"
                 style="@style/TextAppearance.AppCompat.Title"
                 android:layout_width="wrap_content"
@@ -58,6 +58,18 @@
                 app:layout_constraintBottom_toBottomOf="@id/movieTitleTV"
                 app:layout_constraintStart_toEndOf="@+id/movieTitleTV"
                 app:layout_constraintTop_toTopOf="@+id/movieTitleTV"
+                style="@style/TextAppearance.MaterialComponents.Subtitle1"/>
+
+            <TextView
+                android:id="@+id/releaseDateTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="4dp"
+                tools:text="10/15/1999"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/movieTitleTV"
                 style="@style/TextAppearance.MaterialComponents.Subtitle1"/>
 
             <com.ms.square.android.expandabletextview.ExpandableTextView
