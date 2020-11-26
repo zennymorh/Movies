@@ -31,7 +31,7 @@ class DetailScreenFragment : Fragment() {
 
         val movie = args.selectedMovie
 
-        expand_text_view.text = getString(R.string.overview_text)
+        expand_text_view.text = movie.overview
 
     }
 
