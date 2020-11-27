@@ -7,10 +7,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.navigation.fragment.navArgs
+import com.squareup.picasso.Picasso
 import com.zennymorh.movies.Movie
 
 import com.zennymorh.movies.R
+import com.zennymorh.movies.movieScreen.BASE_IMAGE_PATH
 import kotlinx.android.synthetic.main.detail_screen_fragment.*
+import kotlinx.android.synthetic.main.movie_item.view.*
 
 class DetailScreenFragment : Fragment() {
 
@@ -32,6 +35,9 @@ class DetailScreenFragment : Fragment() {
         val movie = args.selectedMovie
 
         expand_text_view.text = movie.overview
+        Picasso.get().load("$BASE_IMAGE_PATH${movie.posterPath}").into(posterBG)
+        movieTitleTV.text = movie.title
+        releaseYearTV.text = "'${movie.releaseDate.substring(0,4)}"
 
     }
 
