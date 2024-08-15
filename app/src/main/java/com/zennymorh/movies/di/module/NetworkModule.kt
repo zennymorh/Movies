@@ -1,6 +1,8 @@
 package com.zennymorh.movies.di.module
 
 import com.zennymorh.movies.api.ApiService
+import com.zennymorh.movies.api.AuthInterceptor
+import com.zennymorh.movies.util.Constants
 import com.zennymorh.movies.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -27,7 +29,13 @@ object NetworkModule {
             .Builder()
             .readTimeout(15, TimeUnit.SECONDS)
             .connectTimeout(15, TimeUnit.SECONDS)
+            .addInterceptor(provideAuthInterceptor())
             .build()
+    }
+
+    @Provides
+    fun provideAuthInterceptor(): AuthInterceptor {
+        return AuthInterceptor(Constants.ACCESS_TOKEN)
     }
 
     @Singleton
