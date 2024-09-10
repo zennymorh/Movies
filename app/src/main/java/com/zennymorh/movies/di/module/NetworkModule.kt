@@ -1,8 +1,8 @@
 package com.zennymorh.movies.di.module
 
+import com.zennymorh.movies.BuildConfig
 import com.zennymorh.movies.api.ApiService
 import com.zennymorh.movies.api.AuthInterceptor
-import com.zennymorh.movies.util.Constants
 import com.zennymorh.movies.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -35,7 +35,7 @@ object NetworkModule {
 
     @Provides
     fun provideAuthInterceptor(): AuthInterceptor {
-        return AuthInterceptor(Constants.ACCESS_TOKEN)
+        return AuthInterceptor(BuildConfig.API_KEY)
     }
 
     @Singleton
