@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
@@ -8,6 +11,9 @@ plugins {
 android {
     namespace = "com.zennymorh.movies"
     compileSdk = 34
+
+    val localProperties = Properties()
+    localProperties.load(FileInputStream(rootProject.file("local.properties")))
 
     defaultConfig {
         applicationId = "com.zennymorh.movies"
@@ -23,6 +29,10 @@ android {
     }
 
     buildTypes {
+        debug {
+            buildConfigField("String", "API_KEY", "\"" + localProperties.getProperty("apiKey") + "\"")
+
+        }
         release {
             isMinifyEnabled = false
             proguardFiles(
@@ -40,6 +50,7 @@ android {
     }
     buildFeatures {
         compose = true
+        buildConfig = true
     }
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
@@ -70,7 +81,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.android.compiler)
+    kapt(libs.hilt.compiler)
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
