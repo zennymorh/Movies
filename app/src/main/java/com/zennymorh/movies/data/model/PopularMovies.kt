@@ -1,4 +1,4 @@
-package com.zennymorh.movies.model
+package com.zennymorh.movies.data.model
 
 import com.google.gson.annotations.SerializedName
 

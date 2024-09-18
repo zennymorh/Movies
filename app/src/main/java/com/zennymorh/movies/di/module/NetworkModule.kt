@@ -3,6 +3,8 @@ package com.zennymorh.movies.di.module
 import com.zennymorh.movies.BuildConfig
 import com.zennymorh.movies.api.ApiService
 import com.zennymorh.movies.api.AuthInterceptor
+import com.zennymorh.movies.data.datasource.remote.MovieRepository
+import com.zennymorh.movies.data.datasource.remote.MovieRepositoryImpl
 import com.zennymorh.movies.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -61,4 +63,11 @@ object NetworkModule {
     @Singleton
     fun provideApiService(retrofit: Retrofit): ApiService =
         retrofit.create(ApiService::class.java)
+
+    @Provides
+    fun provideMovieRepository(
+        movieApi: ApiService,  // Assuming MovieApi is provided by another module
+    ): MovieRepository {
+        return MovieRepositoryImpl(movieApi)
+    }
 }
