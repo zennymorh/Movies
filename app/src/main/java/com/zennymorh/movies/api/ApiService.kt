@@ -1,10 +1,9 @@
 package com.zennymorh.movies.api
 
-import com.zennymorh.movies.model.PopularMovies
-import retrofit2.Response
+import com.zennymorh.movies.data.model.PopularMovies
 import retrofit2.http.GET
 
 interface ApiService {
     @GET("movie/popular")
-    suspend fun getPopularMovies(): Result<Response<PopularMovies>>
+    suspend fun getPopularMovies(): PopularMovies
 }
