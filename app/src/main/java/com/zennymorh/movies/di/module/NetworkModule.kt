@@ -3,8 +3,8 @@ package com.zennymorh.movies.di.module
 import com.zennymorh.movies.BuildConfig
 import com.zennymorh.movies.api.ApiService
 import com.zennymorh.movies.api.AuthInterceptor
-import com.zennymorh.movies.data.datasource.remote.MovieRepository
-import com.zennymorh.movies.data.datasource.remote.MovieRepositoryImpl
+import com.zennymorh.movies.data.datasource.remote.RemoteMovieRepository
+import com.zennymorh.movies.data.datasource.remote.RemoteMovieRepositoryImpl
 import com.zennymorh.movies.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -67,7 +67,7 @@ object NetworkModule {
     @Provides
     fun provideMovieRepository(
         movieApi: ApiService,  // Assuming MovieApi is provided by another module
-    ): MovieRepository {
-        return MovieRepositoryImpl(movieApi)
+    ): RemoteMovieRepository {
+        return RemoteMovieRepositoryImpl(movieApi)
     }
 }
