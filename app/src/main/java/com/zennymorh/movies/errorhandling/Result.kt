@@ -1,13 +1,9 @@
 package com.zennymorh.movies.errorhandling
 
-sealed class Result<out S, out E> {
-    data class Success<out S>(val data: S) : Result<S, Nothing>()
-    data class Error<out E>(val error:E) : Result<Nothing, E>()
+sealed class Result<out T : Any, out U : Any> {
+    data class Success<out T : Any>(val data: T) : Result<T, Nothing>()
+    data class Error<out U : Any>(val errorData: U) : Result<Nothing, U>()
+    data object Loading : Result<Nothing, Nothing>()
 }
 
-sealed class AppError{
-    data object NetworkError : AppError()
-    data object ServerError : AppError()
-    data object ExternalServiceError : AppError()
-    // Add more specific error types as needed
-}
+data class ApiError(val code: Int, val message: String)

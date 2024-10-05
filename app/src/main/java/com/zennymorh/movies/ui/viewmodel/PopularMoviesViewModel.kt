@@ -19,7 +19,7 @@ class PopularMoviesViewModel @Inject constructor(
 
     suspend fun display() {
         viewModelScope.launch {
-//            movieRepository.getMovies()
+//            movieRepository.getPopularMovies()
             _userName.value = "John Doe"
         }
     }
