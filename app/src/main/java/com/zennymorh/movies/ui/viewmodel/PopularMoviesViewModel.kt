@@ -1,8 +1,8 @@
 package com.zennymorh.movies.ui.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.zennymorh.movies.data.datasource.remote.RemoteMovieRepository
 import androidx.lifecycle.viewModelScope
+import com.zennymorh.movies.data.PopularMoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -12,14 +12,14 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PopularMoviesViewModel @Inject constructor(
-    private val remoteMovieRepository: RemoteMovieRepository
+    private val popularMoviesRepository: PopularMoviesRepository
 ): ViewModel() {
     private val _userName = MutableStateFlow("test")
     val userName: StateFlow<String> = _userName
 
     suspend fun display() {
         viewModelScope.launch {
-//            movieRepository.getPopularMovies()
+//            popularMoviesRepository.getPopularMovies()
             _userName.value = "John Doe"
         }
     }

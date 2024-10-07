@@ -3,8 +3,11 @@ package com.zennymorh.movies.di.module
 import com.zennymorh.movies.BuildConfig
 import com.zennymorh.movies.api.ApiService
 import com.zennymorh.movies.api.AuthInterceptor
-import com.zennymorh.movies.data.datasource.remote.RemoteMovieRepository
-import com.zennymorh.movies.data.datasource.remote.RemoteMovieRepositoryImpl
+import com.zennymorh.movies.data.PopularMoviesRepository
+import com.zennymorh.movies.data.PopularMoviesRepositoryImpl
+import com.zennymorh.movies.data.datasource.PopularMoviesDataSource
+import com.zennymorh.movies.data.datasource.local.LocalPopularMoviesDataSource
+import com.zennymorh.movies.data.datasource.remote.RemotePopularMoviesDataSourceImpl
 import com.zennymorh.movies.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -65,9 +68,17 @@ object NetworkModule {
         retrofit.create(ApiService::class.java)
 
     @Provides
-    fun provideMovieRepository(
-        movieApi: ApiService,  // Assuming MovieApi is provided by another module
-    ): RemoteMovieRepository {
-        return RemoteMovieRepositoryImpl(movieApi)
+    fun provideRemotePopularMoviesDataSource(
+        movieApi: ApiService,
+    ): PopularMoviesDataSource {
+        return RemotePopularMoviesDataSourceImpl(movieApi)
+    }
+
+    @Provides
+    fun providePopularMoviesRepository(
+        popularMoviesDataSource: PopularMoviesDataSource,
+        localPopularMoviesDataSource: PopularMoviesDataSource,
+    ): PopularMoviesRepository {
+        return PopularMoviesRepositoryImpl(popularMoviesDataSource)
     }
 }
