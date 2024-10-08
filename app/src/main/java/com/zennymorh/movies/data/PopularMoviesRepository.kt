@@ -14,7 +14,6 @@ class PopularMoviesRepositoryImpl @Inject constructor(
 //    private val localPopularMoviesDataSource: PopularMoviesDataSource,
 ): PopularMoviesRepository {
     override fun getPopularMoviesList(): Flow<List<PopularMovies>> {
-        TODO("Not yet implemented")
+       remotePopularMoviesDataSource.getPopularMovies().toflo
     }
-
 }
