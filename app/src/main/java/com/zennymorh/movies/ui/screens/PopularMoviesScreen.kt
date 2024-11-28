@@ -11,9 +11,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,22 +28,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.zennymorh.movies.errorhandling.Result
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.zennymorh.movies.R
 import com.zennymorh.movies.data.model.Movie
+import com.zennymorh.movies.ui.viewmodel.PopularMoviesViewModel
 
 @Composable
 fun PopularMoviesScreen(
     navController: NavHostController = rememberNavController(),
     modifier: Modifier = Modifier,
+    viewModel: PopularMoviesViewModel = hiltViewModel()
 ) {
-    val popularMoviesList = listOf(
-        Movie(id = "one", title = "Anaconda"),
-        Movie(id = "two", title = "The boss baby"),
-        Movie(id = "three", title = "Shogun"),
-        Movie(id = "four", title = "Godzilla"),
-    )
+    // Collect the state from the ViewModel
+    val moviesState by viewModel.moviesState.collectAsState()
+
+    // When the screen is first created, trigger the movie fetch
+    LaunchedEffect(Unit) {
+        viewModel.fetchPopularMovies()
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -58,10 +68,6 @@ fun PopularMoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        HorizontalList(popularMoviesList, modifier)
-
-        Spacer(modifier = Modifier.height(16.dp))
-
         Text(
             text = "Popular Shows",
             style = MaterialTheme.typography.headlineSmall,
@@ -72,7 +78,21 @@ fun PopularMoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        HorizontalList(popularMoviesList, modifier)
+        // Handle different states
+        when (moviesState) {
+            is Result.Loading -> {
+                // Show a loading indicator
+                CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+            }
+            is Result.Success -> {
+                val movies = (moviesState as Result.Success<List<Movie>>).data
+                // Show the movie list
+                HorizontalList(movies, modifier)
+            }
+            else -> {
+                // TODO Add a failure screen
+            }
+        }
     }
 
 }
