@@ -90,7 +90,7 @@ fun PopularMoviesScreen(
                 HorizontalList(movies, modifier)
             }
             else -> {
-
+                // TODO Add a failure screen
             }
         }
     }

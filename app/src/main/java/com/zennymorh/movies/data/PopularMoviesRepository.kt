@@ -1,9 +1,7 @@
 package com.zennymorh.movies.data
 
-import androidx.compose.runtime.snapshots.SnapshotApplyResult
 import com.zennymorh.movies.data.datasource.PopularMoviesDataSource
 import com.zennymorh.movies.data.model.Movie
-import com.zennymorh.movies.data.model.PopularMovies
 import com.zennymorh.movies.errorhandling.ApiError
 import com.zennymorh.movies.errorhandling.Result
 import kotlinx.coroutines.flow.Flow
@@ -19,7 +17,7 @@ class PopularMoviesRepositoryImpl @Inject constructor(
 ): PopularMoviesRepository {
     override suspend fun getPopularMoviesList(): Flow<Result<List<Movie>, ApiError>> {
         return flow {
-        when (val result = remotePopularMoviesDataSource.getPopularMovies()) {
+            when (val result = remotePopularMoviesDataSource.getPopularMovies()) {
                 is Result.Success -> {
                     // Emit only the 'results' from PopularMovies
                     emit(Result.Success(result.data.results))
@@ -28,9 +26,9 @@ class PopularMoviesRepositoryImpl @Inject constructor(
                     // Pass through the error result as is
                     emit(result)
                 }
-            else -> throw IllegalStateException("Unexpected result type: $result") // Handle unexpected states (if needed)
+                else -> throw IllegalStateException("Unexpected result type: $result") // Handle unexpected states (if needed)
 
-        }
+            }
         }
 
     }
