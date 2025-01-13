@@ -4,8 +4,8 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    id("kotlin-kapt")
     id("com.google.dagger.hilt.android")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -80,13 +80,19 @@ dependencies {
     testImplementation(libs.mockk)
     testImplementation(libs.kotest.runner.junit5)
 
+    implementation(libs.androidx.room.runtime)
+    ksp(libs.androidx.room.compiler)
+    implementation(libs.androidx.room.ktx)
+    testImplementation(libs.androidx.room.testing)
+    implementation(libs.androidx.room.paging)
+
 
 
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
 
@@ -108,10 +114,6 @@ dependencies {
     // Saved state module for ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.savedstate)
 
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 tasks.withType<Test>().configureEach {
