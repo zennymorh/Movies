@@ -77,6 +77,11 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))
     androidTestImplementation(libs.androidx.ui.test.junit4)
+    testImplementation(libs.mockk)
+    testImplementation(libs.kotest.runner.junit5)
+
+
+
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
@@ -107,4 +112,8 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
