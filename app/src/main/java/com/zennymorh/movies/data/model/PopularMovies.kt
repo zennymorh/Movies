@@ -11,15 +11,16 @@ data class PopularMovies(
     val totalResults: Int
 )
 data class Movie(
-    val id: String? = null,
-    val adult: Boolean = false,
+    val id: Int,
+    val adult: Boolean,
     @SerializedName("backdrop_path")
-    val backdropPath: String? = null,
-    val title: String? = null,
+    val backdropPath: String,
+    val title: String,
     @SerializedName("poster_path")
-    val posterPath: String? = null,
+    val posterPath: String,
     @SerializedName("release_date")
-    val releaseDate: String? = null,
+    val releaseDate: String,
     @SerializedName("original_language")
-    val originalLanguage: String? = null,
+    val originalLanguage: String,
+    val overview: String,
 )

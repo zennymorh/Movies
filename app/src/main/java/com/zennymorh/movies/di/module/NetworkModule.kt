@@ -1,5 +1,7 @@
 package com.zennymorh.movies.di.module
 
+import android.content.Context
+import androidx.room.Room
 import com.zennymorh.movies.BuildConfig
 import com.zennymorh.movies.api.ApiService
 import com.zennymorh.movies.api.AuthInterceptor
@@ -8,10 +10,13 @@ import com.zennymorh.movies.data.PopularMoviesRepositoryImpl
 import com.zennymorh.movies.data.datasource.PopularMoviesDataSource
 import com.zennymorh.movies.data.datasource.local.LocalPopularMoviesDataSource
 import com.zennymorh.movies.data.datasource.remote.RemotePopularMoviesDataSourceImpl
+import com.zennymorh.movies.roomdb.PopularMovieDao
+import com.zennymorh.movies.roomdb.PopularMovieDatabase
 import com.zennymorh.movies.util.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -76,9 +81,26 @@ object NetworkModule {
 
     @Provides
     fun providePopularMoviesRepository(
-        popularMoviesDataSource: PopularMoviesDataSource,
-        localPopularMoviesDataSource: PopularMoviesDataSource,
+        popularMovieDao: PopularMovieDao,
+        movieApi: ApiService,
     ): PopularMoviesRepository {
-        return PopularMoviesRepositoryImpl(popularMoviesDataSource)
+        return PopularMoviesRepositoryImpl(popularMovieDao, movieApi)
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieDatabase(@ApplicationContext context: Context): PopularMovieDatabase {
+        return Room.databaseBuilder(
+            context,
+            PopularMovieDatabase::class.java,
+            "movie_database"
+        ).fallbackToDestructiveMigration()
+            .build()
+    }
+
+    @Provides
+    @Singleton
+    fun provideMovieDao(movieDatabase: PopularMovieDatabase): PopularMovieDao {
+        return movieDatabase.movieDao()
     }
 }

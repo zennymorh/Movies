@@ -8,9 +8,12 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -21,6 +24,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
@@ -29,11 +33,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.zennymorh.movies.errorhandling.Result
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.zennymorh.movies.R
-import com.zennymorh.movies.data.model.Movie
+import com.zennymorh.movies.data.model.PopularMovieEntity
+import com.zennymorh.movies.errorhandling.AppError
 import com.zennymorh.movies.ui.viewmodel.PopularMoviesViewModel
 
 @Composable
@@ -43,11 +47,17 @@ fun PopularMoviesScreen(
     viewModel: PopularMoviesViewModel = hiltViewModel()
 ) {
     // Collect the state from the ViewModel
-    val moviesState by viewModel.moviesState.collectAsState()
+    val moviesState by viewModel.movies.collectAsState()
 
-    // When the screen is first created, trigger the movie fetch
-    LaunchedEffect(Unit) {
-        viewModel.fetchPopularMovies()
+    when  {
+        moviesState.isOk -> {
+            val movies = moviesState.value
+            HorizontalList(popularMoviesList = movies, modifier = modifier)
+        }
+        moviesState.isErr -> {
+            println("HELLOOO: ${moviesState.error}")
+            ErrorScreen(moviesState.error) { viewModel.refreshPopularMovies() }
+        }
     }
 
     Column(
@@ -78,28 +88,28 @@ fun PopularMoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        // Handle different states
-        when (moviesState) {
-            is Result.Loading -> {
-                // Show a loading indicator
-                CircularProgressIndicator(modifier = Modifier.fillMaxSize())
-            }
-            is Result.Success -> {
-                val movies = (moviesState as Result.Success<List<Movie>>).data
-                // Show the movie list
-                HorizontalList(movies, modifier)
-            }
-            else -> {
-                // TODO Add a failure screen
-            }
-        }
+//        // Handle different states
+//        when (moviesState) {
+//            is Result.Loading -> {
+//                // Show a loading indicator
+//                CircularProgressIndicator(modifier = Modifier.fillMaxSize())
+//            }
+//            is Result.Success -> {
+//                val movies = (moviesState as Result.Success<List<Movie>>).data
+//                // Show the movie list
+//                HorizontalList(movies, modifier)
+//            }
+//            else -> {
+//                // TODO Add a failure screen
+//            }
+//        }
     }
 
 }
 
 @Composable
 private fun HorizontalList(
-    popularMoviesList: List<Movie>,
+    popularMoviesList: List<PopularMovieEntity>,
     modifier: Modifier
 ) {
     LazyRow {
@@ -116,13 +126,40 @@ private fun HorizontalList(
                     painter = painterResource(id = R.drawable.generic_movie),
                     contentDescription = null
                 )
-                Text(text = item.title ?: "NO name found")
+                Text(text = item.title)
             }
 
 
         }
     }
 }
+
+@Composable
+fun ErrorScreen(error: AppError, onRetry: () -> Unit) {
+    val errorMessage = when (error) {
+        AppError.NetworkError -> "No Internet Connection. Please check your network."
+        AppError.TimeoutError -> "The request took too long. Try again."
+        is AppError.ServerError -> "Server Error: ${error.code} - ${error.message ?: "Unknown"}"
+        AppError.UnknownError -> "An unexpected error occurred."
+        AppError.EmptyResponseError -> "No movies found. Try again later."
+        AppError.DatabaseError -> "Failed to retrieve movies from database."
+        AppError.IOError -> "IO Error."
+    }
+
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .wrapContentSize(Alignment.Center),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(text = errorMessage, color = Color.Red)
+        Spacer(modifier = Modifier.height(8.dp))
+        Button(onClick = onRetry) {
+            Text(text = "Retry")
+        }
+    }
+}
+
 
 @Preview(showBackground = true)
 @Composable
