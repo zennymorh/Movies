@@ -83,8 +83,9 @@ object NetworkModule {
     fun providePopularMoviesRepository(
         popularMovieDao: PopularMovieDao,
         movieApi: ApiService,
+        popularMovieDatabase: PopularMovieDatabase,
     ): PopularMoviesRepository {
-        return PopularMoviesRepositoryImpl(popularMovieDao, movieApi)
+        return PopularMoviesRepositoryImpl(popularMovieDao, movieApi, popularMovieDatabase)
     }
 
     @Provides

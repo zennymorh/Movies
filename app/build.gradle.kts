@@ -118,6 +118,10 @@ dependencies {
     implementation(libs.kotlin.result)
     implementation(libs.kotlin.result.coroutines)
 
+    implementation(libs.androidx.paging.runtime)
+    implementation(libs.androidx.paging.compose)
+
+
 }
 
 kapt {

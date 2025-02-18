@@ -1,6 +1,8 @@
 package com.zennymorh.movies.ui.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -9,18 +11,13 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,11 +27,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import androidx.paging.LoadState
 import com.zennymorh.movies.R
 import com.zennymorh.movies.data.model.PopularMovieEntity
 import com.zennymorh.movies.errorhandling.AppError
@@ -46,17 +46,38 @@ fun PopularMoviesScreen(
     modifier: Modifier = Modifier,
     viewModel: PopularMoviesViewModel = hiltViewModel()
 ) {
-    // Collect the state from the ViewModel
-    val moviesState by viewModel.movies.collectAsState()
+    val pagingData = viewModel.movies.collectAsLazyPagingItems()
 
-    when  {
-        moviesState.isOk -> {
-            val movies = moviesState.value
-            HorizontalList(popularMoviesList = movies, modifier = modifier)
+    when (pagingData.loadState.refresh) { // Check refresh state first
+        is LoadState.Loading -> {
+            LoadingScreen()
         }
-        moviesState.isErr -> {
-            println("HELLOOO: ${moviesState.error}")
-            ErrorScreen(moviesState.error) { viewModel.refreshPopularMovies() }
+        is LoadState.Error -> {
+            ErrorScreen(error = AppError.UnknownError) { viewModel.refreshPopularMovies() }
+        }
+        else -> {
+            LazyRow(
+                modifier = modifier.fillMaxSize(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(pagingData.itemCount) { index ->
+                    val movie = pagingData[index] // Access item using index
+                    movie?.let {
+                        MovieItem(movie = it, modifier = modifier)
+                    }
+                }
+                // Handle the load state for appending
+                when (pagingData.loadState.append) {
+                    is LoadState.Loading -> {
+                        item { LoadingMoreIndicator() } // Show loading indicator at the end
+                    }
+                    is LoadState.Error -> {
+                        // Handle append error if needed
+                    }
+
+                    else -> {}
+                }
+            }
         }
     }
 
@@ -87,50 +108,54 @@ fun PopularMoviesScreen(
         )
 
         Spacer(modifier = Modifier.height(16.dp))
-
-//        // Handle different states
-//        when (moviesState) {
-//            is Result.Loading -> {
-//                // Show a loading indicator
-//                CircularProgressIndicator(modifier = Modifier.fillMaxSize())
-//            }
-//            is Result.Success -> {
-//                val movies = (moviesState as Result.Success<List<Movie>>).data
-//                // Show the movie list
-//                HorizontalList(movies, modifier)
-//            }
-//            else -> {
-//                // TODO Add a failure screen
-//            }
-//        }
     }
 
 }
 
 @Composable
-private fun HorizontalList(
-    popularMoviesList: List<PopularMovieEntity>,
-    modifier: Modifier
-) {
-    LazyRow {
-        items(popularMoviesList) { item ->
-            Column(
-                Modifier.padding(4.dp),
-                horizontalAlignment = Alignment.CenterHorizontally
-            ) {
-                Image(
-                    modifier = modifier
-                        .size(120.dp, 300.dp)
-                        .clip(RoundedCornerShape(8)),
-                    contentScale = ContentScale.Crop,
-                    painter = painterResource(id = R.drawable.generic_movie),
-                    contentDescription = null
-                )
-                Text(text = item.title)
-            }
+fun LoadingScreen() {
+    // Show loading indicator while data is being fetched
+    Box(
+        modifier = Modifier.fillMaxSize(),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
 
+@Composable
+fun LoadingMoreIndicator() {
+    // Show a loading indicator for more data being appended
+    Box(
+        modifier = Modifier.fillMaxWidth().padding(16.dp),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator()
+    }
+}
 
-        }
+@Composable
+fun MovieItem(movie: PopularMovieEntity, modifier: Modifier) {
+    // A single movie item in the list
+    Column(
+        modifier = modifier.padding(4.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            modifier = modifier
+                .size(120.dp, 180.dp)
+                .clip(RoundedCornerShape(8)),
+            contentScale = ContentScale.Crop,
+            painter = painterResource(id = R.drawable.generic_movie), // Use your image loading logic here
+            contentDescription = movie.title
+        )
+        Text(
+            text = movie.title,
+            style = MaterialTheme.typography.bodyMedium,
+            textAlign = TextAlign.Center,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
     }
 }
 
