@@ -1,9 +1,9 @@
 [versions]
-agp = "8.3.2"
+agp = "8.11.0"
 converterGson = "2.9.0"
 hiltNavigationCompose = "1.2.0"
 kotestRunnerJunit5 = "5.6.0"
-kotlin = "1.9.20"
+kotlin = "2.0.0"
 coreKtx = "1.13.1"
 junit = "4.13.2"
 junitVersion = "1.2.1"
@@ -12,7 +12,7 @@ kotlinResult = "2.0.1"
 lifecycleRuntimeKtx = "2.8.4"
 activityCompose = "1.9.1"
 composeBom = "2024.06.00"
-hiltAndroid = "2.52"
+hiltAndroid = "2.56.2"
 lifecycleRuntimeKtxVersion = "2.8.5"
 lifecycleVersion = "2.8.5"
 mockk = "1.13.5"
@@ -20,7 +20,7 @@ navigationCompose = "2.8.0"
 pagingRuntime = "3.3.6"
 pagingCompose = "3.3.6"
 retrofit = "2.9.0"
-roomRuntime = "2.6.1"
+roomRuntime = "2.7.2"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
@@ -64,4 +64,6 @@ retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }
 jetbrainsKotlinAndroid = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+
 

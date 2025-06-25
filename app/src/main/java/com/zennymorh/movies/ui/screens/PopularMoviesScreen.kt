@@ -35,6 +35,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import androidx.paging.LoadState
+import androidx.paging.compose.LazyPagingItems
 import com.zennymorh.movies.R
 import com.zennymorh.movies.data.model.PopularMovieEntity
 import com.zennymorh.movies.errorhandling.AppError
@@ -47,39 +48,6 @@ fun PopularMoviesScreen(
     viewModel: PopularMoviesViewModel = hiltViewModel()
 ) {
     val pagingData = viewModel.movies.collectAsLazyPagingItems()
-
-    when (pagingData.loadState.refresh) { // Check refresh state first
-        is LoadState.Loading -> {
-            LoadingScreen()
-        }
-        is LoadState.Error -> {
-            ErrorScreen(error = AppError.UnknownError) { viewModel.refreshPopularMovies() }
-        }
-        else -> {
-            LazyRow(
-                modifier = modifier.fillMaxSize(),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(pagingData.itemCount) { index ->
-                    val movie = pagingData[index] // Access item using index
-                    movie?.let {
-                        MovieItem(movie = it, modifier = modifier)
-                    }
-                }
-                // Handle the load state for appending
-                when (pagingData.loadState.append) {
-                    is LoadState.Loading -> {
-                        item { LoadingMoreIndicator() } // Show loading indicator at the end
-                    }
-                    is LoadState.Error -> {
-                        // Handle append error if needed
-                    }
-
-                    else -> {}
-                }
-            }
-        }
-    }
 
     Column(
         modifier = Modifier
@@ -99,6 +67,18 @@ fun PopularMoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        when (pagingData.loadState.refresh) { // Check refresh state first
+            is LoadState.Loading -> {
+                LoadingScreen()
+            }
+            is LoadState.Error -> {
+                ErrorScreen(error = AppError.UnknownError) { viewModel.refreshPopularMovies() }
+            }
+            else -> {
+                PopularMovieList(modifier, pagingData)
+            }
+        }
+
         Text(
             text = "Popular Shows",
             style = MaterialTheme.typography.headlineSmall,
@@ -110,6 +90,36 @@ fun PopularMoviesScreen(
         Spacer(modifier = Modifier.height(16.dp))
     }
 
+}
+
+@Composable
+private fun PopularMovieList(
+    modifier: Modifier,
+    pagingData: LazyPagingItems<PopularMovieEntity>
+) {
+    LazyRow(
+        modifier = modifier.fillMaxSize(),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(pagingData.itemCount) { index ->
+            val movie = pagingData[index] // Access item using index
+            movie?.let {
+                MovieItem(movie = it, modifier = modifier)
+            }
+        }
+        // Handle the load state for appending
+        when (pagingData.loadState.append) {
+            is LoadState.Loading -> {
+                item { LoadingMoreIndicator() } // Show loading indicator at the end
+            }
+
+            is LoadState.Error -> {
+                // Handle append error if needed
+            }
+
+            else -> {}
+        }
+    }
 }
 
 @Composable
