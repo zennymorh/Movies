@@ -7,5 +7,4 @@ sealed class AppError {
     data object UnknownError : AppError()
     data object EmptyResponseError : AppError()
     data object DatabaseError : AppError()
-    data object IOError : AppError()
 }

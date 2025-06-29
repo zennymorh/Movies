@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">Movies</string>
+    <string name="no_internet">No internet connection. Please check your network settings.</string>
+    <string name="timeout_request">The request timed out.</string>
+    <string name="api_error">Server Error: %1$d - %2$s</string>
+    <string name="generic_error">An unexpected error occurred.</string>
+    <string name="empty_response_error">No movies found. Try again later.</string>
+    <string name="database_error">Failed to retrieve movies from database.</string>
 </resources>

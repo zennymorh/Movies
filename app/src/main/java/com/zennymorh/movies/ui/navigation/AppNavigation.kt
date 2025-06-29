@@ -29,7 +29,7 @@ fun AppNavHost(
         startDestination = startDestination
     ) {
         composable(NavigationItem.PopularMovies.route) {
-            PopularMoviesScreen(navController)
+            PopularMoviesScreen()
         }
     }
 }

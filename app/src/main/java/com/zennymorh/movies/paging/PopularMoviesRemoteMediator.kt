@@ -78,8 +78,6 @@ class PopularMoviesRemoteMediator(
             } else {
                 Err(AppError.ServerError(response.code(), response.message()))
             }
-        } catch (e: IOException) {
-            Err(AppError.IOError)
         } catch (e: SocketTimeoutException) {
             Err(AppError.TimeoutError)
         } catch (e: Exception) {

@@ -18,12 +18,12 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class PopularMoviesViewModel @Inject constructor(
+open class PopularMoviesViewModel @Inject constructor(
     private val popularMoviesRepository: PopularMoviesRepository
 ): ViewModel() {
 
     private val _movies = MutableStateFlow<PagingData<PopularMovieEntity>>(PagingData.empty())
-    val movies: StateFlow<PagingData<PopularMovieEntity>> = _movies
+    open val movies: StateFlow<PagingData<PopularMovieEntity>> = _movies
 
     init {
         viewModelScope.launch {
