@@ -178,6 +178,13 @@ complexity:
     ignoreOverridden: false
     ignoreAnnotatedFunctions: []
 
+formatting:
+  active: true
+  Indentation:
+    active: true
+  NoWildcardImports:
+    active: true
+
 coroutines:
   active: true
   GlobalCoroutineUsage:
@@ -335,6 +342,8 @@ naming:
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     functionPattern: '[a-z][a-zA-Z0-9]*'
     excludeClassPattern: '$^'
+    ignoreAnnotated:
+      - Composable
   FunctionParameterNaming:
     active: true
     parameterPattern: '[a-z][A-Za-z0-9]*'
@@ -627,12 +636,16 @@ style:
       - '0'
       - '1'
       - '2'
+      - '3'
+      - '4'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: false
     ignoreLocalVariableDeclaration: false
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: false
+    ignoreAnnotated:
+      - Composable
     ignoreNamedArgument: true
     ignoreEnums: false
     ignoreRanges: false

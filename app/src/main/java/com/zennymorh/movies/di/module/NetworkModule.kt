@@ -7,9 +7,6 @@ import com.zennymorh.movies.api.ApiService
 import com.zennymorh.movies.api.AuthInterceptor
 import com.zennymorh.movies.data.PopularMoviesRepository
 import com.zennymorh.movies.data.PopularMoviesRepositoryImpl
-import com.zennymorh.movies.data.datasource.PopularMoviesDataSource
-import com.zennymorh.movies.data.datasource.local.LocalPopularMoviesDataSource
-import com.zennymorh.movies.data.datasource.remote.RemotePopularMoviesDataSourceImpl
 import com.zennymorh.movies.roomdb.PopularMovieDao
 import com.zennymorh.movies.roomdb.PopularMovieDatabase
 import com.zennymorh.movies.util.Constants.BASE_URL
@@ -34,11 +31,13 @@ object NetworkModule {
 
     @Singleton
     @Provides
+    @Suppress("MagicNumber")
     fun provideHttpClient(): OkHttpClient {
+        val fifteen: Long = 15
         return OkHttpClient
             .Builder()
-            .readTimeout(15, TimeUnit.SECONDS)
-            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(fifteen, TimeUnit.SECONDS)
+            .connectTimeout(fifteen, TimeUnit.SECONDS)
             .addInterceptor(provideAuthInterceptor())
             .build()
     }
@@ -73,13 +72,6 @@ object NetworkModule {
         retrofit.create(ApiService::class.java)
 
     @Provides
-    fun provideRemotePopularMoviesDataSource(
-        movieApi: ApiService,
-    ): PopularMoviesDataSource {
-        return RemotePopularMoviesDataSourceImpl(movieApi)
-    }
-
-    @Provides
     fun providePopularMoviesRepository(
         popularMovieDao: PopularMovieDao,
         movieApi: ApiService,
@@ -92,10 +84,10 @@ object NetworkModule {
     @Singleton
     fun provideMovieDatabase(@ApplicationContext context: Context): PopularMovieDatabase {
         return Room.databaseBuilder(
-            context,
-            PopularMovieDatabase::class.java,
-            "movie_database"
-        ).fallbackToDestructiveMigration()
+                context,
+                PopularMovieDatabase::class.java,
+                "movie_database"
+            ).fallbackToDestructiveMigration(false)
             .build()
     }
 

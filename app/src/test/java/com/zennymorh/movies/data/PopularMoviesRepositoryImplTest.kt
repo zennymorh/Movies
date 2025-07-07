@@ -11,8 +11,5 @@ class PopularMoviesRepositoryImplTest {
     private val mockDao = mockk<PopularMovieDao>(relaxed = true)
     private val mockApi = mockk<ApiService>()
 
-    @Before
-    fun setUp() {
-        repository = PopularMoviesRepositoryImpl(mockDao, mockApi)
-    }
+
 }
