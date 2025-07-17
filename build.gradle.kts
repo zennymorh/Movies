@@ -2,9 +2,11 @@
 plugins {
     alias(libs.plugins.androidApplication) apply false
     alias(libs.plugins.jetbrainsKotlinAndroid) apply false
-    id("com.google.dagger.hilt.android") version "2.52" apply false
+    alias(libs.plugins.daggerHiltAndroid) apply false
     alias(libs.plugins.compose.compiler) apply false
-    id("io.gitlab.arturbosch.detekt") version "1.23.8"
+    alias(libs.plugins.detekt)
+    alias(libs.plugins.ktlint)
+    alias(libs.plugins.ksp) apply false
 }
 
 detekt {
@@ -14,6 +16,4 @@ detekt {
     autoCorrect = true
 }
 
-dependencies {
-    detektPlugins(libs.detekt.formatting)
-}
+ktlint { }
