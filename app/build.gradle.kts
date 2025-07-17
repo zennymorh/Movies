@@ -32,7 +32,6 @@ android {
     buildTypes {
         debug {
             buildConfigField("String", "API_KEY", "\"" + localProperties.getProperty("apiKey") + "\"")
-
         }
         release {
             isMinifyEnabled = false
@@ -84,15 +83,12 @@ dependencies {
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.room.paging)
 
-
-
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
-
 
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
@@ -112,14 +108,12 @@ dependencies {
     // Saved state module for ViewModel
     implementation(libs.androidx.lifecycle.viewmodel.savedstate)
 
-    //Result
+    // Result
     implementation(libs.kotlin.result)
     implementation(libs.kotlin.result.coroutines)
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-
-
 }
 
 kapt {

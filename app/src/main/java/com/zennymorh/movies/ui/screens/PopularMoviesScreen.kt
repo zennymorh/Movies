@@ -33,11 +33,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.paging.compose.collectAsLazyPagingItems
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.zennymorh.movies.R
@@ -89,19 +89,20 @@ fun PopularMoviesScreen(
             }
         }
     }
-
 }
 
 @Composable
+@Suppress("MagicNumber")
 private fun PopularMovieList(
     modifier: Modifier,
     pagingData: LazyPagingItems<PopularMovieEntity>
 ) {
+    val three = 3
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3), // Define the number of columns, e.g., 2
+        columns = GridCells.Fixed(three), // Define the number of columns, e.g., 2
         modifier = modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(3.dp),
-        verticalArrangement = Arrangement.spacedBy(3.dp) // Add vertical spacing if needed
+        horizontalArrangement = Arrangement.spacedBy(three.dp),
+        verticalArrangement = Arrangement.spacedBy(three.dp) // Add vertical spacing if needed
     ) {
         items(pagingData.itemCount) { index ->
             val movie = pagingData[index] // Access item using index
@@ -150,6 +151,7 @@ fun LoadingMoreIndicator() {
 }
 
 @Composable
+@Suppress("MagicNumber")
 fun MovieItem(movie: PopularMovieEntity, modifier: Modifier) {
     Column(
         modifier = modifier.padding(4.dp),
@@ -189,7 +191,7 @@ fun ErrorScreen(error: AppError, onRetry: () -> Unit, modifier: Modifier) {
     }
 
     Column(
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .wrapContentSize(Alignment.Center),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -204,8 +206,7 @@ fun ErrorScreen(error: AppError, onRetry: () -> Unit, modifier: Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-fun PreviewPopularMovies(
-) {
+fun PreviewPopularMovies() {
     PopularMoviesScreen(
         viewModel = PopularMoviesViewModel(FakePopularMoviesRepository())
     )
@@ -227,10 +228,11 @@ fun PreviewPopularMoviesError() {
 @Composable
 fun PreviewPopularMoviesLoading() {
     MaterialTheme {
-         LoadingScreen()
+        LoadingScreen()
     }
 }
 
+@Suppress("MagicNumber")
 class FakePopularMoviesRepository : PopularMoviesRepository {
     override fun getMovies(): Flow<Result<PagingData<PopularMovieEntity>, AppError>> {
         val sampleMovies = List(10) { index ->
