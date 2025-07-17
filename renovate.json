@@ -3,4 +3,7 @@
   "extends": [
     "config:recommended"
   ]
+  "schedule": ["after 6am and before 7am every weekday"],
+  "prHourlyLimit": 1,
+  "prConcurrentLimit": 1
 }
