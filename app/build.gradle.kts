@@ -5,8 +5,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
-    id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
+    alias(libs.plugins.daggerHiltAndroid)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -78,7 +78,7 @@ dependencies {
     testImplementation(libs.kotest.runner.junit5)
 
     implementation(libs.androidx.room.runtime)
-    kapt(libs.androidx.room.compiler)
+    ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
     testImplementation(libs.androidx.room.testing)
     implementation(libs.androidx.room.paging)
@@ -87,7 +87,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
     implementation(libs.androidx.hilt.navigation.compose)
 
     implementation(libs.retrofit)
@@ -114,10 +114,6 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
-}
-
-kapt {
-    correctErrorTypes = true
 }
 
 tasks.withType<Test>().configureEach {
