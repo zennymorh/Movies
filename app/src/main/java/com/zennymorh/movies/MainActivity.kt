@@ -9,7 +9,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import androidx.navigation.compose.rememberNavController
-import com.zennymorh.movies.ui.navigation.appNavHost
+import com.zennymorh.movies.ui.navigation.AppNavHost
 import com.zennymorh.movies.ui.theme.MoviesTheme
 import dagger.hilt.android.AndroidEntryPoint
 

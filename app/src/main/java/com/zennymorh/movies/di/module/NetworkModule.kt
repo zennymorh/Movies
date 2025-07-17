@@ -84,10 +84,10 @@ object NetworkModule {
     @Singleton
     fun provideMovieDatabase(@ApplicationContext context: Context): PopularMovieDatabase {
         return Room.databaseBuilder(
-                context,
-                PopularMovieDatabase::class.java,
-                "movie_database"
-            ).fallbackToDestructiveMigration(false)
+            context,
+            PopularMovieDatabase::class.java,
+            "movie_database"
+        ).fallbackToDestructiveMigration(false)
             .build()
     }
 
