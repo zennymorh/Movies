@@ -11,7 +11,7 @@ plugins {
 
 android {
     namespace = "com.zennymorh.movies"
-    compileSdk = 34
+    compileSdk = 36
 
     val localProperties = Properties()
     localProperties.load(FileInputStream(rootProject.file("local.properties")))
@@ -114,8 +114,10 @@ dependencies {
 
     implementation(libs.androidx.paging.runtime)
     implementation(libs.androidx.paging.compose)
+    implementation(libs.coil.compose)
 }
 
 tasks.withType<Test>().configureEach {
     useJUnitPlatform()
 }
+

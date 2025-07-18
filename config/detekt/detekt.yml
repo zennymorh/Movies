@@ -178,13 +178,6 @@ complexity:
     ignoreOverridden: false
     ignoreAnnotatedFunctions: []
 
-formatting:
-  active: true
-  Indentation:
-    active: true
-  NoWildcardImports:
-    active: true
-
 coroutines:
   active: true
   GlobalCoroutineUsage:

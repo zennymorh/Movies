@@ -1,6 +1,5 @@
 package com.zennymorh.movies.ui.screens
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -25,7 +24,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -38,6 +37,8 @@ import androidx.paging.LoadState
 import androidx.paging.PagingData
 import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
+import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.github.michaelbull.result.Ok
 import com.github.michaelbull.result.Result
 import com.zennymorh.movies.R
@@ -58,13 +59,13 @@ fun PopularMoviesScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(0.dp),
+            .padding(16.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Spacer(modifier = Modifier.height(24.dp))
+        Spacer(modifier = Modifier.height(36.dp))
         Text(
-            text = "Trending Movies",
-            fontStyle = FontStyle.Normal,
+            text = "Trending",
+            fontStyle = FontStyle.Italic,
             style = MaterialTheme.typography.headlineSmall,
             textAlign = TextAlign.Start,
             modifier = Modifier.fillMaxWidth(),
@@ -154,17 +155,24 @@ fun LoadingMoreIndicator() {
 @Suppress("MagicNumber")
 fun MovieItem(movie: PopularMovieEntity, modifier: Modifier) {
     Column(
-        modifier = modifier.padding(4.dp),
+        modifier = modifier
+            .padding(4.dp)
+            .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Image(
-            modifier = modifier
-                .size(120.dp, 180.dp)
-                .clip(RoundedCornerShape(4)),
-            contentScale = ContentScale.Crop,
-            painter = painterResource(id = R.drawable.generic_movie), // Use your image loading logic here
-            contentDescription = movie.title
+        AsyncImage(
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(movie.fullPosterUrl) // Use the full URL
+                .crossfade(true)
+                .placeholder(R.drawable.generic_movie)
+                .build(),
+            contentDescription = movie.title, // Important for accessibility
+            modifier = Modifier
+                .size(120.dp, 180.dp) // Adjust size as needed
+                .clip(RoundedCornerShape(8.dp)), // Nicer rounded corners
+            contentScale = ContentScale.Crop // How the image should be scaled
         )
+        Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = movie.title,
             style = MaterialTheme.typography.bodyMedium,

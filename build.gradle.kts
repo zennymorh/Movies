@@ -16,4 +16,12 @@ detekt {
     autoCorrect = true
 }
 
+tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
+    exclude("**/build/**")
+    exclude("**/generated/**")
+    exclude("**/resources/**")
+    exclude("**/.gradle/**")
+    exclude("**/.*")
+}
+
 ktlint { }
