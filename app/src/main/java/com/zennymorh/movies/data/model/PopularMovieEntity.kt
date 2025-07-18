@@ -9,6 +9,9 @@ data class PopularMovieEntity(
     val id: Int,
     val title: String,
     val overview: String,
-    val posterPath: String,
+    val posterPath: String?,
     val releaseDate: String,
-)
+) {
+    val fullPosterUrl: String?
+        get() = posterPath?.let { "https://image.tmdb.org/t/p/w500$it" }
+}
