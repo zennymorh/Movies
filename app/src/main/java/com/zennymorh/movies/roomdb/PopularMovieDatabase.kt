@@ -4,7 +4,7 @@ import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.zennymorh.movies.data.model.PopularMovieEntity
 
-@Database(entities = [PopularMovieEntity::class], version = 1, exportSchema = false)
+@Database(entities = [PopularMovieEntity::class], version = 2, exportSchema = true)
 abstract class PopularMovieDatabase : RoomDatabase() {
     abstract fun movieDao(): PopularMovieDao
 }
