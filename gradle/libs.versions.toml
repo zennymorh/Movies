@@ -1,7 +1,7 @@
 [versions]
 agp = "8.11.1"
 coilCompose = "2.6.0"
-converterGson = "2.9.0"
+converterGson = "2.12.0"
 daggerHiltAndroid = "2.57"
 detekt = "1.23.8"
 hiltNavigationCompose = "1.2.0"
@@ -23,7 +23,7 @@ mockk = "1.14.5"
 navigationCompose = "2.9.2"
 pagingRuntime = "3.3.6"
 pagingCompose = "3.3.6"
-retrofit = "2.9.0"
+retrofit = "2.12.0"
 roomRuntime = "2.7.2"
 
 [libraries]
