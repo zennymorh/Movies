@@ -1,5 +1,5 @@
 [versions]
-agp = "8.12.0"
+agp = "9.0.0"
 coilCompose = "2.7.0"
 converterGson = "3.0.0"
 daggerHiltAndroid = "2.59"
