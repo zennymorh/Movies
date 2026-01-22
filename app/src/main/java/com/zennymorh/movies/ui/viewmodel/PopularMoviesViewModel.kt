@@ -22,7 +22,7 @@ open class PopularMoviesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             popularMoviesRepository.getMovies().collect { result ->
-                _movies.value = result.value
+                _movies.value = result
             }
         }
     }
