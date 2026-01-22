@@ -3,7 +3,6 @@ import java.util.Properties
 
 plugins {
     alias(libs.plugins.androidApplication)
-    alias(libs.plugins.jetbrainsKotlinAndroid)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.daggerHiltAndroid)
     alias(libs.plugins.ksp)
@@ -45,9 +44,7 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions {
-        jvmTarget = "17"
-    }
+
     buildFeatures {
         compose = true
         buildConfig = true
@@ -56,6 +53,20 @@ android {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
+    }
+
+    sourceSets {
+        getByName("main") {
+            java.srcDirs("additionalSourceDirectory/kotlin")
+        }
+    }
+}
+
+kotlin {
+    compilerOptions {
+        languageVersion = org.jetbrains.kotlin.gradle.dsl.KotlinVersion.KOTLIN_2_0
+        // Optional: Set jvmTarget
+        // jvmTarget = org.jetbrains.kotlin.gradle.dsl.JvmTarget.JVM_11
     }
 }
 
@@ -100,8 +111,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     // LiveData
     implementation(libs.androidx.lifecycle.livedata.ktx)
-    // Lifecycles only (without ViewModel or LiveData)
-    implementation(libs.androidx.lifecycle.runtime.ktx.v285)
     // Lifecycle utilities for Compose
     implementation(libs.androidx.lifecycle.runtime.compose)
 

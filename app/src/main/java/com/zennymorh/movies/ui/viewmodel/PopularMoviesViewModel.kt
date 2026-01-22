@@ -22,14 +22,8 @@ open class PopularMoviesViewModel @Inject constructor(
     init {
         viewModelScope.launch {
             popularMoviesRepository.getMovies().collect { result ->
-                _movies.value = result.value
+                _movies.value = result
             }
-        }
-    }
-
-    fun refreshPopularMovies() {
-        viewModelScope.launch {
-            _movies.value = PagingData.empty() // Clear the list to trigger a refresh
         }
     }
 }

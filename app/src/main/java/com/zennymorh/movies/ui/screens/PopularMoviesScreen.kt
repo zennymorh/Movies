@@ -1,5 +1,6 @@
 package com.zennymorh.movies.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -39,12 +40,11 @@ import androidx.paging.compose.LazyPagingItems
 import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
-import com.github.michaelbull.result.Ok
-import com.github.michaelbull.result.Result
 import com.zennymorh.movies.R
 import com.zennymorh.movies.data.PopularMoviesRepository
 import com.zennymorh.movies.data.model.PopularMovieEntity
-import com.zennymorh.movies.errorhandling.AppError
+import com.zennymorh.movies.network.AppError
+import com.zennymorh.movies.network.toAppError
 import com.zennymorh.movies.ui.viewmodel.PopularMoviesViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
@@ -74,14 +74,15 @@ fun PopularMoviesScreen(
 
         Spacer(modifier = Modifier.height(16.dp))
 
-        when (pagingData.loadState.refresh) { // Check refresh state first
+        when (val refreshState = pagingData.loadState.refresh) {
             is LoadState.Loading -> {
                 LoadingScreen()
             }
             is LoadState.Error -> {
+                val error = refreshState.error.toAppError()
                 ErrorScreen(
-                    error = AppError.UnknownError,
-                    onRetry = { viewModel.refreshPopularMovies() },
+                    error = error,
+                    onRetry = { pagingData.retry() },
                     modifier = modifier
                 )
             }
@@ -98,39 +99,61 @@ private fun PopularMovieList(
     modifier: Modifier,
     pagingData: LazyPagingItems<PopularMovieEntity>
 ) {
-    val three = 3
     LazyVerticalGrid(
-        columns = GridCells.Fixed(three), // Define the number of columns, e.g., 2
+        columns = GridCells.Fixed(3),
         modifier = modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(three.dp),
-        verticalArrangement = Arrangement.spacedBy(three.dp) // Add vertical spacing if needed
+        horizontalArrangement = Arrangement.spacedBy(3.dp),
+        verticalArrangement = Arrangement.spacedBy(3.dp)
     ) {
         items(pagingData.itemCount) { index ->
-            val movie = pagingData[index] // Access item using index
+            val movie = pagingData[index]
             movie?.let {
                 MovieItem(movie = it, modifier = modifier)
             }
         }
-        // Handle the load state for appending
-        when (pagingData.loadState.append) {
+
+        when (val appendState = pagingData.loadState.append) {
             is LoadState.Loading -> {
-                item(span = { GridItemSpan(maxLineSpan) }) { // Span all columns
+                item(span = { GridItemSpan(maxLineSpan) }) {
                     LoadingMoreIndicator()
                 }
             }
-
             is LoadState.Error -> {
-                // Handle append error if needed
+                item(span = { GridItemSpan(maxLineSpan) }) {
+                    AppendErrorItem(
+                        error = appendState.error.toAppError(),
+                        onRetry = { pagingData.retry() }
+                    )
+                }
             }
-
             else -> {}
         }
     }
 }
 
 @Composable
+fun AppendErrorItem(error: AppError, onRetry: () -> Unit) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Text(
+            text = "Error loading more...",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Red
+        )
+        Toast.makeText(LocalContext.current, error.toString(), Toast.LENGTH_SHORT).show()
+
+        Button(onClick = onRetry) {
+            Text(text = "Retry", style = MaterialTheme.typography.labelSmall)
+        }
+    }
+}
+
+@Composable
 fun LoadingScreen() {
-    // Show loading indicator while data is being fetched
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -162,15 +185,15 @@ fun MovieItem(movie: PopularMovieEntity, modifier: Modifier) {
     ) {
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
-                .data(movie.fullPosterUrl) // Use the full URL
+                .data(movie.fullPosterUrl)
                 .crossfade(true)
                 .placeholder(R.drawable.generic_movie)
                 .build(),
-            contentDescription = movie.title, // Important for accessibility
+            contentDescription = movie.title,
             modifier = Modifier
-                .size(120.dp, 180.dp) // Adjust size as needed
-                .clip(RoundedCornerShape(8.dp)), // Nicer rounded corners
-            contentScale = ContentScale.Crop // How the image should be scaled
+                .size(120.dp, 180.dp)
+                .clip(RoundedCornerShape(8.dp)),
+            contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
@@ -204,8 +227,8 @@ fun ErrorScreen(error: AppError, onRetry: () -> Unit, modifier: Modifier) {
             .wrapContentSize(Alignment.Center),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = errorMessage, color = Color.Red)
-        Spacer(modifier = Modifier.height(8.dp))
+        Text(text = errorMessage, color = Color.Red, textAlign = TextAlign.Center)
+        Spacer(modifier = Modifier.height(16.dp))
         Button(onClick = onRetry) {
             Text(text = "Retry")
         }
@@ -242,16 +265,16 @@ fun PreviewPopularMoviesLoading() {
 
 @Suppress("MagicNumber")
 class FakePopularMoviesRepository : PopularMoviesRepository {
-    override fun getMovies(): Flow<Result<PagingData<PopularMovieEntity>, AppError>> {
+    override fun getMovies(): Flow<PagingData<PopularMovieEntity>> {
         val sampleMovies = List(10) { index ->
             PopularMovieEntity(
                 id = index,
                 title = "Movie Title ${index + 1}",
-                overview = "This is a great movie overview for movie ${index + 1}.",
-                posterPath = "/path${index + 1}.jpg",
-                releaseDate = "2023-01-${index + 1}",
+                overview = "This is a great movie overview.",
+                posterPath = "/path.jpg",
+                releaseDate = "2023-01-01",
             )
         }
-        return flowOf(Ok(PagingData.from(sampleMovies)))
+        return flowOf(PagingData.from(sampleMovies))
     }
 }
