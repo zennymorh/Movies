@@ -1,7 +1,6 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 plugins {
     alias(libs.plugins.androidApplication) apply false
-    alias(libs.plugins.jetbrainsKotlinAndroid) apply false
     alias(libs.plugins.daggerHiltAndroid) apply false
     alias(libs.plugins.compose.compiler) apply false
     alias(libs.plugins.detekt)
@@ -25,3 +24,10 @@ tasks.withType<io.gitlab.arturbosch.detekt.Detekt>().configureEach {
 }
 
 ktlint { }
+
+buildscript {
+    dependencies {
+        classpath(libs.kotlin.gradle.plugin)
+
+    }
+}
