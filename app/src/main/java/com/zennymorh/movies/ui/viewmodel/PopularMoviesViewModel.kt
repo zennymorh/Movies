@@ -26,10 +26,4 @@ open class PopularMoviesViewModel @Inject constructor(
             }
         }
     }
-
-    fun refreshPopularMovies() {
-        viewModelScope.launch {
-            _movies.value = PagingData.empty() // Clear the list to trigger a refresh
-        }
-    }
 }

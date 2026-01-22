@@ -15,6 +15,7 @@ import com.zennymorh.movies.roomdb.PopularMovieDatabase
 import java.io.IOException
 import java.net.SocketTimeoutException
 
+@Suppress("MagicNumber")
 @OptIn(ExperimentalPagingApi::class)
 class PopularMoviesRemoteMediator(
     private val movieDao: PopularMovieDao,
@@ -69,10 +70,13 @@ class PopularMoviesRemoteMediator(
                 MediatorResult.Error(AppException(AppError.ServerError(response.code(), response.message())))
             }
         } catch (e: SocketTimeoutException) {
+            Log.e("PopularMoviesRemoteMediator", "Timeout error: ${e.message}")
             MediatorResult.Error(AppException(AppError.TimeoutError))
         } catch (e: IOException) {
+            Log.e("PopularMoviesRemoteMediator", "Network error: ${e.message}")
             MediatorResult.Error(AppException(AppError.NetworkError))
-        } catch (e: Exception) {
+        } catch (@Suppress("TooGenericExceptionCaught") e: Exception) {
+            Log.e("PopularMoviesRemoteMediator", "Error: ${e.message}")
             MediatorResult.Error(AppException(AppError.UnknownError))
         }
     }

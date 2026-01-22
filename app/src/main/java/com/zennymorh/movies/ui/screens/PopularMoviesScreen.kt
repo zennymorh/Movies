@@ -1,5 +1,6 @@
 package com.zennymorh.movies.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -138,7 +139,13 @@ fun AppendErrorItem(error: AppError, onRetry: () -> Unit) {
             .padding(8.dp),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(text = "Error loading more...", style = MaterialTheme.typography.bodySmall, color = Color.Red)
+        Text(
+            text = "Error loading more...",
+            style = MaterialTheme.typography.bodySmall,
+            color = Color.Red
+        )
+        Toast.makeText(LocalContext.current, error.toString(), Toast.LENGTH_SHORT).show()
+
         Button(onClick = onRetry) {
             Text(text = "Retry", style = MaterialTheme.typography.labelSmall)
         }
