@@ -5,32 +5,44 @@ An architecture decision record (ADR) is a document that captures an important a
 
 ## 001. Architecture Pattern: Clean Architecture + MVVM
 **Status:** Accepted
+
 **Decision:** 
+
 **Rationale:** 
 
 ## 002. Data Fetching: Paging 3 with RemoteMediator
 **Status:** 
+
 **Decision:** 
+
 **Rationale:** Provides seamless infinite scrolling and handles the complexity of merging network data into the Room database.
 
 ## 003. Dependency Injection: Hilt
 **Status:** Accepted
+
 **Decision:** 
+
 **Rationale:**
 
 ## 004. Network Layer & API Management
 **Status:** Accepted
+
 **Decision:** Use Retrofit with OkHttp and a custom `AuthInterceptor` for TMDB API communication.
+
 **Rationale:** Retrofit is the industry standard for Android networking. OkHttp allows for robust interceptor logic (adding the API key to every request) and custom timeout configurations, ensuring a reliable connection.
 
 ## 005. Error Handling Strategy
 **Status:** Accepted
+
 **Decision:** Implement a centralized `AppError` sealed class to represent various failure states (Network, Server, Unknown).
+
 **Rationale:** This decouples the UI from raw exceptions. By mapping network results to `AppError` in the Data layer (e.g., in `RemoteMediator`), the UI can react with specific messages or retry logic without knowing the underlying implementation details.
 
 ## 006. Code Quality & Static Analysis
 **Status:** Accepted
+
 **Decision:** Integrate Detekt for static code analysis.
+
 **Rationale:** Maintains code consistency and prevents common pitfalls (like unused parameters or complex functions) early in the development cycle. It ensures the codebase adheres to the "Senior Developer" standards defined in `AGENTS.md`.
 
 ---
