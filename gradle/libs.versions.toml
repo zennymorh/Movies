@@ -23,7 +23,7 @@ navigationCompose = "2.9.7"
 pagingCompose = "3.3.6"
 pagingRuntime = "3.3.6"
 retrofit = "3.0.0"
-roomRuntime = "2.7.2"
+roomRuntime = "2.8.4"
 
 [libraries]
 # AndroidX
