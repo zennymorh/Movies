@@ -27,7 +27,7 @@ class PopularMoviesRepositoryImpl @Inject constructor(
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
-                prefetchDistance = 2,
+                prefetchDistance = 5,
                 enablePlaceholders = false
             ),
             remoteMediator = PopularMoviesRemoteMediator(movieDao, apiService, database),

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +21,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -59,8 +61,7 @@ fun PopularMoviesScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
+            .padding(horizontal = 16.dp),
     ) {
         Spacer(modifier = Modifier.height(36.dp))
         Text(
@@ -100,12 +101,18 @@ private fun PopularMovieList(
     pagingData: LazyPagingItems<PopularMovieEntity>
 ) {
     LazyVerticalGrid(
-        columns = GridCells.Fixed(3),
+        columns = GridCells.Adaptive(minSize = 120.dp),
         modifier = modifier.fillMaxSize(),
-        horizontalArrangement = Arrangement.spacedBy(3.dp),
-        verticalArrangement = Arrangement.spacedBy(3.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
     ) {
-        items(pagingData.itemCount) { index ->
+        items(
+            count =  pagingData.itemCount,
+            key = { index ->
+                val movie = pagingData.peek(index)
+                movie?.id ?: index
+            }
+        ) { index ->
             val movie = pagingData[index]
             movie?.let {
                 MovieItem(movie = it, modifier = modifier)
@@ -133,6 +140,7 @@ private fun PopularMovieList(
 
 @Composable
 fun AppendErrorItem(error: AppError, onRetry: () -> Unit) {
+    val context = LocalContext.current
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -144,7 +152,9 @@ fun AppendErrorItem(error: AppError, onRetry: () -> Unit) {
             style = MaterialTheme.typography.bodySmall,
             color = Color.Red
         )
-        Toast.makeText(LocalContext.current, error.toString(), Toast.LENGTH_SHORT).show()
+        LaunchedEffect(error) {
+            Toast.makeText(context, error.toString(), Toast.LENGTH_SHORT).show()
+        }
 
         Button(onClick = onRetry) {
             Text(text = "Retry", style = MaterialTheme.typography.labelSmall)
@@ -179,7 +189,6 @@ fun LoadingMoreIndicator() {
 fun MovieItem(movie: PopularMovieEntity, modifier: Modifier) {
     Column(
         modifier = modifier
-            .padding(4.dp)
             .fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
@@ -191,14 +200,15 @@ fun MovieItem(movie: PopularMovieEntity, modifier: Modifier) {
                 .build(),
             contentDescription = movie.title,
             modifier = Modifier
-                .size(120.dp, 180.dp)
-                .clip(RoundedCornerShape(8.dp)),
+                .fillMaxWidth()
+                .aspectRatio(2f / 3f)
+                .clip(RoundedCornerShape(12.dp)),
             contentScale = ContentScale.Crop
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
             text = movie.title,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             textAlign = TextAlign.Center,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
