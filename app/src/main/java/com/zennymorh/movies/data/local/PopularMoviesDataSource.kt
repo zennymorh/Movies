@@ -1,4 +1,4 @@
-package com.zennymorh.movies.data.datasource
+package com.zennymorh.movies.data.local
 
 interface PopularMoviesDataSource {
     suspend fun getPopularMovies()

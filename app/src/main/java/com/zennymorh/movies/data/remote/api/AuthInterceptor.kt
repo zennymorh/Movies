@@ -1,4 +1,4 @@
-package com.zennymorh.movies.api
+package com.zennymorh.movies.data.remote.api
 
 import okhttp3.Interceptor
 import okhttp3.Response

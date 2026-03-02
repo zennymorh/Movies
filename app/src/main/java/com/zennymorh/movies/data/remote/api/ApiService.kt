@@ -1,6 +1,6 @@
-package com.zennymorh.movies.api
+package com.zennymorh.movies.data.remote.api
 
-import com.zennymorh.movies.data.model.PopularMovies
+import com.zennymorh.movies.domain.model.PopularMovies
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Query

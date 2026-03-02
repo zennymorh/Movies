@@ -1,4 +1,4 @@
-package com.zennymorh.movies.roomdb
+package com.zennymorh.movies.data.local
 
 import androidx.paging.PagingSource
 import androidx.room.Dao

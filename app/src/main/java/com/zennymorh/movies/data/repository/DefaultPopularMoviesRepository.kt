@@ -1,22 +1,19 @@
-package com.zennymorh.movies.data
+package com.zennymorh.movies.data.repository
 
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.Pager
 import androidx.paging.PagingConfig
 import androidx.paging.PagingData
-import com.zennymorh.movies.api.ApiService
+import com.zennymorh.movies.data.local.PopularMovieDao
+import com.zennymorh.movies.data.local.PopularMovieDatabase
 import com.zennymorh.movies.data.model.PopularMovieEntity
-import com.zennymorh.movies.paging.PopularMoviesRemoteMediator
-import com.zennymorh.movies.roomdb.PopularMovieDao
-import com.zennymorh.movies.roomdb.PopularMovieDatabase
+import com.zennymorh.movies.data.paging.PopularMoviesRemoteMediator
+import com.zennymorh.movies.data.remote.api.ApiService
+import com.zennymorh.movies.domain.repository.PopularMoviesRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-interface PopularMoviesRepository {
-    fun getMovies(): Flow<PagingData<PopularMovieEntity>>
-}
-
-class PopularMoviesRepositoryImpl @Inject constructor(
+class DefaultPopularMoviesRepository @Inject constructor(
     private val movieDao: PopularMovieDao,
     private val apiService: ApiService,
     private val database: PopularMovieDatabase
@@ -30,7 +27,7 @@ class PopularMoviesRepositoryImpl @Inject constructor(
                 prefetchDistance = 5,
                 enablePlaceholders = false
             ),
-            remoteMediator = PopularMoviesRemoteMediator(movieDao, apiService, database),
+            remoteMediator = PopularMoviesRemoteMediator(apiService, database),
             pagingSourceFactory = { movieDao.getAllMoviesPaged() }
         ).flow
     }

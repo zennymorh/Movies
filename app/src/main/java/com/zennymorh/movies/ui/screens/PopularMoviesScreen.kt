@@ -10,7 +10,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.GridItemSpan
@@ -43,10 +42,10 @@ import androidx.paging.compose.collectAsLazyPagingItems
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.zennymorh.movies.R
-import com.zennymorh.movies.data.PopularMoviesRepository
+import com.zennymorh.movies.domain.repository.PopularMoviesRepository
 import com.zennymorh.movies.data.model.PopularMovieEntity
-import com.zennymorh.movies.network.AppError
-import com.zennymorh.movies.network.toAppError
+import com.zennymorh.movies.data.error.AppError
+import com.zennymorh.movies.data.error.toAppError
 import com.zennymorh.movies.ui.viewmodel.PopularMoviesViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
