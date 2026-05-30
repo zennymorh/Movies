@@ -3,13 +3,12 @@ package com.zennymorh.movies.di.module
 import android.content.Context
 import androidx.room.Room
 import com.zennymorh.movies.BuildConfig
-import com.zennymorh.movies.api.ApiService
-import com.zennymorh.movies.api.AuthInterceptor
-import com.zennymorh.movies.data.PopularMoviesRepository
-import com.zennymorh.movies.data.PopularMoviesRepositoryImpl
-import com.zennymorh.movies.roomdb.PopularMovieDao
-import com.zennymorh.movies.roomdb.PopularMovieDatabase
-import com.zennymorh.movies.util.Constants.BASE_URL
+import com.zennymorh.movies.data.remote.api.ApiService
+import com.zennymorh.movies.data.remote.api.AuthInterceptor
+import com.zennymorh.movies.domain.repository.PopularMoviesRepository
+import com.zennymorh.movies.data.local.PopularMovieDao
+import com.zennymorh.movies.data.local.PopularMovieDatabase
+import com.zennymorh.movies.data.repository.DefaultPopularMoviesRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,7 +25,7 @@ import javax.inject.Singleton
 object NetworkModule {
     @Provides
     fun provideBaseUrl(): String {
-        return BASE_URL
+        return "https://api.themoviedb.org/3/"
     }
 
     @Singleton
@@ -77,7 +76,7 @@ object NetworkModule {
         movieApi: ApiService,
         popularMovieDatabase: PopularMovieDatabase,
     ): PopularMoviesRepository {
-        return PopularMoviesRepositoryImpl(popularMovieDao, movieApi, popularMovieDatabase)
+        return DefaultPopularMoviesRepository(popularMovieDao, movieApi, popularMovieDatabase)
     }
 
     @Provides

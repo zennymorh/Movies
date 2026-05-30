@@ -1,4 +1,4 @@
-package com.zennymorh.movies.network
+package com.zennymorh.movies.data.error
 
 sealed class AppError {
     data object NetworkError : AppError()
